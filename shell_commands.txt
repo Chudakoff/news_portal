@@ -61,7 +61,7 @@ a[0].authorUser.username, a[0].authorRating
 10. Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье.
 
 p = Post.objects.order_by('-rating')
-p[0]
+p[0]   #скорректирован метот __str__ в классе Post
 
 или
 
@@ -71,3 +71,13 @@ p[0].dateCreation, p[0].author.authorUser.username, p[0].rating, p[0].__dict__['
 11. Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
 
 q = Comment.objects.all().filter(commentPost=p[0])
+for i in q:    #скорректирован метот __str__ в классе Comment
+    i
+
+или просто
+
+q
+
+или
+
+q[0].dateCreation, q[0].commentUser.username, q[0].rating, q[0].text
