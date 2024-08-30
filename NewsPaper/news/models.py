@@ -8,13 +8,13 @@ class Author(models.Model):
     authorRating = models.IntegerField(default=0)
 
     def update_rating(self):
-        postRating = self.post_set.aggregate(postRat=Sum('rating'))
+        postRat = self.post_set.aggregate(postRating=Sum('rating'))
         pRat = 0
-        pRat += postRating.get('postRat')
+        pRat += postRat.get('postRating')
 
-        commentRating = self.authorUser.comment_set.aggregate(commentRat=Sum('rating'))
+        commentRat = self.authorUser.comment_set.aggregate(commentRating=Sum('rating'))
         cRat = 0
-        cRat += commentRating.get('commentRat')
+        cRat += commentRat.get('commentRating')
 
         self.authorRating = pRat*3 + cRat
         self.save()
@@ -39,9 +39,11 @@ class Post(models.Model):
     text = models.TextField()
     rating = models.IntegerField(default=0)
 
+    def __str__(self):
+        return f'\ndate: {self.dateCreation}\nauthor: {self.author.authorUser.username}\nrating: {self.rating}\ntitle: {self.title}\ntext preview: {self.preview()}\n'
 
     def preview(self):
-        return f'{self.text[:124]}...'
+        return f'{self.text[:124]}...' if len(self.text) > 124 else self.text
 
     def like(self):
         self.rating += 1
@@ -56,12 +58,16 @@ class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)
     categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+
 class Comment(models.Model):
     commentPost = models.ForeignKey(Post, on_delete=models.CASCADE)
     commentUser = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     dateCreation = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'\ndate: {self.dateCreation}\nuser: {self.commentUser.username}\nrating: {self.rating}\ntext: {self.text}\n'
 
     def like(self):
         self.rating += 1
