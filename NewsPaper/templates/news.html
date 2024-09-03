@@ -1,0 +1,16 @@
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет Product -->
+{% block title %}
+Posts
+{% endblock title %}
+<hr>
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% block content %}
+<hr>
+<h1>{{ post.title }}</h1>
+<!-- <p>published</p> -->
+<p>published: {{ post.dateCreation|date:'d M Y' }}</p>
+<hr>
+<p>{{post.text}}</p>
+{% endblock content %}
