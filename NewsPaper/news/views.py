@@ -6,7 +6,9 @@ class NewsList(ListView):
     model = Post
     ordering = '-dateCreation'
     template_name = 'newslist.html'
-    context_object_name = 'post'
+    context_object_name = 'posts_list'
+    paginate_by = 10
+
 
 class NewsDetail(DetailView):
     model = Post

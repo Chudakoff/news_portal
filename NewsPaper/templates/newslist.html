@@ -8,8 +8,8 @@ News list
 
 {% block content %}
    <h1>Все новости</h1>
-   <p> всего новостей: {{ post|length }}</p>
-   {% if post %}
+   <p> всего новостей на странице: {{ posts_list|length }}</p>
+   {% if posts_list %}
    <hr>
    <table>
     <tr>
@@ -17,7 +17,7 @@ News list
         <td>Дата публикации</td>
         <td>Текст статьи</td>
     </tr>
-    {% for post in post %}
+    {% for post in posts_list %}
     <tr>
         <td>{{ post.title|truncatechars:22|censor }}</td>
         <td>{{ post.dateCreation|date:'d M Y' }}</td>
@@ -27,5 +27,23 @@ News list
     </table>
    {% else %}
        <h2>Увы, новостей пока нет!</h2>
+   {% endif %}
+
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
    {% endif %}
 {% endblock content %}
