@@ -1,5 +1,9 @@
+from django.shortcuts import render, HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from .models import Post
+from .filters import PostsFilter
+from .forms import PostForm
+
 
 # Create your views here.
 class NewsList(ListView):
@@ -9,8 +13,37 @@ class NewsList(ListView):
     context_object_name = 'posts_list'
     paginate_by = 10
 
+class NewsSearch(ListView):
+    model = Post
+    ordering = '-dateCreation'
+    template_name = 'search.html'
+    context_object_name = 'posts_search'
+    paginate_by = 2
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostsFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Добавляем в контекст объект фильтрации.
+        context['filterset'] = self.filterset
+        return context
 
 class NewsDetail(DetailView):
     model = Post
     template_name = 'news.html'
     context_object_name = 'post'
+
+
+def create_post(request):
+    form = PostForm()
+
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/news/')
+
+    return render(request, 'post_edit.html', {'form': form})
