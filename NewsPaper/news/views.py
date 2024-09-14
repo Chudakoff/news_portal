@@ -1,5 +1,6 @@
-from django.shortcuts import render, HttpResponseRedirect
-from django.views.generic import ListView, DetailView
+# from django.shortcuts import render, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
 from .filters import PostsFilter
 from .forms import PostForm
@@ -18,7 +19,7 @@ class NewsSearch(ListView):
     ordering = '-dateCreation'
     template_name = 'search.html'
     context_object_name = 'posts_search'
-    paginate_by = 2
+    # paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -37,13 +38,38 @@ class NewsDetail(DetailView):
     context_object_name = 'post'
 
 
-def create_post(request):
-    form = PostForm()
+# def create_post(request):
+#     form = PostForm()
 
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/news/')
+#     if request.method == 'POST':
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect('/news/')
 
-    return render(request, 'post_edit.html', {'form': form})
+#     return render(request, 'post_edit.html', {'form': form})
+
+class ArticleCreate(CreateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'article_edit.html'
+
+class ArticleUpdate(UpdateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'article_edit.html'
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('posts_list')
+
+class NewsCreate(CreateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'article_edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.categoryType = 'NW'
+        return super().form_valid(form)
