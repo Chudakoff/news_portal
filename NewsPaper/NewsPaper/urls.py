@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from news.views import ArticleCreate, ArticleUpdate, PostDelete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('portal/', include('news.urls')),
+    path('news/', include('news.urls')),
+    path('articles/create/', ArticleCreate.as_view(), name='articles_create'),
+    path('articles/<int:pk>/update/', ArticleUpdate.as_view(), name='articles_update'),
+    path('articles/<int:pk>/delete/', PostDelete.as_view(), name='articles_delete'),
+
 ]
