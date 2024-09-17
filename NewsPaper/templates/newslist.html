@@ -9,6 +9,13 @@ News list
 {% block content %}
     <h1>Все новости</h1>
     <p> всего новостей на странице: {{ posts_list|length }}</p>
+    {% if perms.news.add_post %}
+    <!-- <a href="{% url 'news_create' %}">Добавить новость</a> или <a href="{% url 'articles_create' %}">Добавить статью</a> -->
+    <form action="{% url 'news_create' %}" target="">
+        <button class="btn btn-warning">Add news</button>
+    <form action="{% url 'articles_create' %}" target="">
+        <button class="btn btn-warning">Add article</button>
+    {% endif %}
     {% if posts_list %}
     <hr>
     <table>
@@ -19,9 +26,17 @@ News list
     </tr>
     {% for post in posts_list %}
     <tr>
-        <td>{{ post.title|truncatechars:22|censor }}</td>
+        <td><a href="{% url 'post_detail' post.id %}">{{ post.title|truncatechars:22|censor }}</a></td>
         <td>{{ post.dateCreation|date:'d M Y' }}</td>
         <td>{{ post.text|truncatewords:20|censor }}</td>
+        <td>
+            {% if perms.news.add_post %}
+                <a href="{% url 'news_update' pk=post.id %}">Изменить</a>
+            {% endif %}
+            {% if perms.news.add_post %}
+                <a href="{% url 'news_delete' post.id %}">Удалить</a>
+            {% endif %}
+        </td>
     </tr>
     {% endfor %}
     </table>
@@ -46,4 +61,5 @@ News list
            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
        {% endif %}
    {% endif %}
+<hr>
 {% endblock content %}

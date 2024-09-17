@@ -10,7 +10,14 @@ Post
 <hr>
 <h1>{{ post.title }}</h1>
 <!-- <p>published</p> -->
-<p>published: {{ post.dateCreation|date:'d M Y' }}</p>
+<p>published {{ post.dateCreation|date:'d M Y' }} by {{ post.author.authorUser.username }}</p>
 <hr>
 <p>{{post.text}}</p>
+<p> ❤️ {{ post.rating }}</p>
+{% if perms.news.add_post %}
+    <a href="{% url 'news_update' pk=post.id %}">Изменить</a>
+{% endif %}
+{% if perms.news.add_post %}
+    <a href="{% url 'news_delete' post.id %}">Удалить</a>
+{% endif %}
 {% endblock content %}
