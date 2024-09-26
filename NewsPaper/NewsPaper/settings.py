@@ -156,12 +156,35 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
-LOGIN_REDIRECT_URL = "/news"
+LOGIN_REDIRECT_URL = "/news/"
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+
+EMAIL_HOST_USER = "achudakoff@yandex.ru"
+EMAIL_HOST_PASSWORD = "fouzukailbvenmwp"
+
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = "achudakoff@yandex.ru"
+
+SERVER_EMAIL = "achudakoff@yandex.ru"
+
+MANAGERS = (
+    ('Alexander', 'achudakoff@yandex.ru'),
+    ('Petr', 'achudakoff@yandex.ru'),
+)
+
+ADMINS = (
+    ('Alex', 'chudakoff@yahoo.com'),
+)

@@ -22,10 +22,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('accounts/', include('django.contrib.auth.urls')),
     # path('accounts/', include('accounts.urls')),
-    path("accounts/", include("allauth.urls")),
+    path('accounts/', include('allauth.urls')),
     path('news/', include('news.urls')),
     path('articles/create/', ArticleCreate.as_view(), name='articles_create'),
     path('articles/<int:pk>/update/', ArticleUpdate.as_view(), name='articles_update'),
     path('articles/<int:pk>/delete/', PostDelete.as_view(), name='articles_delete'),
+    path('', include('django.contrib.flatpages.urls')),
+    # path('subscriptions/', subscriptions, name='subscriptions'),
 
 ]

@@ -1,9 +1,9 @@
-from django import forms
+from django.forms import ModelForm, TextInput, TypedChoiceField
 from .models import Post
 from django.core.exceptions import ValidationError
 
 
-class PostForm(forms.ModelForm):
+class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = [
@@ -12,6 +12,13 @@ class PostForm(forms.ModelForm):
            'text',
            'postCategory'
         ]
+
+        # widgets = {
+        #     'title': TextInput(attrs={
+        #         'class': 'form-control',
+        #         'placeholder': 'Название статьи'
+        #     })
+        # }
 
     def clean(self):
         cleaned_data = super().clean()

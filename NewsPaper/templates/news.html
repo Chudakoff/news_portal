@@ -15,9 +15,11 @@ Post
 <p>{{post.text}}</p>
 <p> ❤️ {{ post.rating }}</p>
 {% if perms.news.add_post %}
-    <a href="{% url 'news_update' pk=post.id %}">Изменить</a>
+    <a href="{% url 'news_update' pk=post.id %}"><button class="btn btn-success">Изменить</button></a>
 {% endif %}
 {% if perms.news.add_post %}
-    <a href="{% url 'news_delete' post.id %}">Удалить</a>
+    <a href="{% url 'news_delete' post.id %}"><button class="btn btn-danger">Удалить</button></a>
 {% endif %}
+<hr>
+<!-- {% include 'commentslist.html' %} -->
 {% endblock content %}

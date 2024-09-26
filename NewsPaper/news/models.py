@@ -8,6 +8,9 @@ class Author(models.Model):
     authorUser = models.OneToOneField(User, on_delete=models.CASCADE)
     authorRating = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.authorUser.username
+
     def update_rating(self):
         postRat = self.post_set.aggregate(postRating=Sum('rating'))
         pRat = 0
@@ -23,6 +26,10 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique = True)
+    subscribers = models.ManyToManyField(User, related_name='categories')
+
+    def __str__(self):
+        return self.name
 
 
 class Post(models.Model):
@@ -80,3 +87,16 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
+    category = models.ForeignKey(
+        to='PostCategory',
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )

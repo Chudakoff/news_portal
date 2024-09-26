@@ -7,17 +7,34 @@ News list
 {% endblock title %}
 
 {% block content %}
-    <h1>Все новости</h1>
-    <p> всего новостей на странице: {{ posts_list|length }}</p>
-    {% if perms.news.add_post %}
-    <!-- <a href="{% url 'news_create' %}">Добавить новость</a> или <a href="{% url 'articles_create' %}">Добавить статью</a> -->
-    <form action="{% url 'news_create' %}" target="">
-        <button class="btn btn-warning">Add news</button>
-    <form action="{% url 'articles_create' %}" target="">
-        <button class="btn btn-warning">Add article</button>
-    {% endif %}
+<h1 class="text-center">Новости <span class="text-muted fs-6 fw-normal">Bcero: {{ page_obj.paginator.count }} </span></h1>
+
+<hr>
+    <!-- {% if perms.news.add_post %}
+    <a href="{% url 'news_create' %}"><button class="btn btn-warning">Добавить новость</button></a> <a href="{% url 'articles_create' %}"><button class="btn btn-warning">Добавить статью</button></a>
+    {% endif %} -->
     {% if posts_list %}
-    <hr>
+    <ul class="list-group list-group-flush"></ul>
+        {% for post in posts_list %}
+            <li class="List-group-item">
+                <small class="fw-bold"> {{ post.dateCreation|date:'d M Y' }} </small>
+                <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
+                <small class="text-muted"> (автор: {{ post.author }}) </small> <br>
+                <small class="fw-bold">Категории: <br>
+                    {% for category in post.postCategory.all %}
+                        <a href="{% url 'category_list' category.id %}">{{ category }}</a>
+                    {% endfor %}
+                </small>
+                <p>{{ post.text | truncatechars:210 }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+
+
+
+
+
+    <!-- <hr>
     <table>
     <tr>
         <td>Заголовок</td>
@@ -26,20 +43,15 @@ News list
     </tr>
     {% for post in posts_list %}
     <tr>
-        <td><a href="{% url 'post_detail' post.id %}">{{ post.title|truncatechars:22|censor }}</a></td>
+        <td>{{ post.title|truncatechars:22|censor }}</td>
         <td>{{ post.dateCreation|date:'d M Y' }}</td>
         <td>{{ post.text|truncatewords:20|censor }}</td>
         <td>
-            {% if perms.news.add_post %}
-                <a href="{% url 'news_update' pk=post.id %}">Изменить</a>
-            {% endif %}
-            {% if perms.news.add_post %}
-                <a href="{% url 'news_delete' post.id %}">Удалить</a>
-            {% endif %}
+            <a href="{% url 'post_detail' post.id %}"><button type="button" class="btn btn-light">читать</button></a>
         </td>
-    </tr>
-    {% endfor %}
-    </table>
+    </tr> -->
+    <!-- {% endfor %}
+    </table> -->
    {% else %}
        <h2>Увы, новостей пока нет!</h2>
    {% endif %}
